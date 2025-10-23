@@ -2,13 +2,18 @@
 # SPDX-License-Identifier: MPL-2.0
 
 identity_token "aws" {
-  audience = ["<Set to your AWS IAM assume-role audience>"]
+  audience = ["aws.workload.identity"]
+}
+
+store "varset" "aws_auth" {
+  category = "env"
+  name     = "hc-justin-clayton-varset"
 }
 
 deployment "development" {
   inputs = {
-    regions        = ["us-east-1"]
-    role_arn       = "<Set to your development AWS account IAM role ARN>"
+    regions        = ["us-west-2"]
+    role_arn       = store.varset.aws_auth.stable.TFC_AWS_RUN_ROLE_ARN
     identity_token = identity_token.aws.jwt
     default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
   }
@@ -16,8 +21,8 @@ deployment "development" {
 
 deployment "production" {
   inputs = {
-    regions        = ["us-east-1", "us-west-1"]
-    role_arn       = "<Set to your production AWS account IAM role ARN>"
+    regions        = ["us-west-2", "us-east-2"]
+    role_arn       = store.varset.aws_auth.stable.TFC_AWS_RUN_ROLE_ARN
     identity_token = identity_token.aws.jwt
     default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
   }
