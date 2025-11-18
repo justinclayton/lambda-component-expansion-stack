@@ -11,6 +11,7 @@ store "varset" "aws_auth" {
 }
 
 deployment "development" {
+  destroy = true
   inputs = {
     regions        = ["us-west-2"]
     role_arn       = store.varset.aws_auth.stable.TFC_AWS_RUN_ROLE_ARN
@@ -20,6 +21,7 @@ deployment "development" {
 }
 
 deployment "production" {
+  destroy = true
   inputs = {
     regions        = ["us-west-2", "us-east-2"]
     role_arn       = store.varset.aws_auth.stable.TFC_AWS_RUN_ROLE_ARN
